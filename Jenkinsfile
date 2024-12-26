@@ -2,11 +2,11 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE_BACKEND = "" // Docker Image tag <repository-name>/<image-name>:<version>
-        DOCKER_IMAGE_FRONTEND = "" // Docker Image tag <repository-name>/<image-name>:<version>
-        DOCKER_CREDENTIALS = "" // Docker Hub credentials ID in Jenkins
+        DOCKER_IMAGE_BACKEND = "project-devops/backend" // Docker Image tag <repository-name>/<image-name>:<version>
+        DOCKER_IMAGE_FRONTEND = "project-devops/client" // Docker Image tag <repository-name>/<image-name>:<version>
+        DOCKER_CREDENTIALS = "dockerhub" // Docker Hub credentials ID in Jenkins
         SSH_CREDENTIALS = "" // SSH credentials ID in Jenkins
-        KUBE_MANIFEST_DIR = "" // Path to Kubernetes manifest files on the remote server
+        KUBE_MANIFEST_DIR = "./k8s" 
         REMOTE_USER = "" // Remote server username
         REMOTE_HOST = "" // Remote server hostname or IP
     }
