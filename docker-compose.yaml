@@ -1,0 +1,40 @@
+services:
+  
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+
+  
+  backend:
+    build:
+      context: ./backenddd
+      dockerfile: Dockerfile
+    container_name: backend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongodb
+    environment:
+      DATABASE_URL: mongodb://root:root@db:27017/devops-proj?authSource=admin
+
+  
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+
+volumes:
+  mongodb_data:

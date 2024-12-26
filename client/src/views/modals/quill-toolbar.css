@@ -1,0 +1,6 @@
+.ql-toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: white; /* Optional: make sure it has a background to cover content */
+  }
