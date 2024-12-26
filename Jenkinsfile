@@ -2,13 +2,12 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE_BACKEND = "project-devops/backend" // Docker Image tag <repository-name>/<image-name>:<version>
-        DOCKER_IMAGE_FRONTEND = "project-devops/client" // Docker Image tag <repository-name>/<image-name>:<version>
-        DOCKER_CREDENTIALS = "dockerhub" // Docker Hub credentials ID in Jenkins
-        SSH_CREDENTIALS = "" // SSH credentials ID in Jenkins
+        DOCKER_IMAGE_BACKEND = "project-devops/backend" 
+        DOCKER_IMAGE_FRONTEND = "project-devops/client" 
+        DOCKER_CREDENTIALS = "dockerhub" 
+        SSH_CREDENTIALS = "" 
         KUBE_MANIFEST_DIR = "./k8s" 
-        REMOTE_USER = "" // Remote server username
-        REMOTE_HOST = "" // Remote server hostname or IP
+  
     }
 
     stages {
@@ -40,7 +39,7 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 script {
-                    withDockerRegistry([credentialsId: "${DOCKER_CREDENTIALS}", url: ""]) { // Docker registry URL
+                    withDockerRegistry([credentialsId: "${DOCKER_CREDENTIALS}", url: ""]) { 
                         sh "docker push ${DOCKER_IMAGE_BACKEND}"
                         sh "docker push ${DOCKER_IMAGE_FRONTEND}"
                     }
@@ -48,25 +47,25 @@ pipeline {
             }
         }
 
-        stage('Deploy to Kubernetes') {
-            steps {
-                script {
-                    sshagent(credentials: ["${SSH_CREDENTIALS}"]) {
-                        // SSH into the remote server and apply Kubernetes manifests
-                        sh """
-                            ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "
-                                cd ${KUBE_MANIFEST_DIR} &&
-                                kubectl apply -f backend-deployment.yaml &&
-                                kubectl apply -f frontend-deployment.yaml &&
-                                kubectl apply -f db-deployment.yaml &&
-                                kubectl apply -f prometheus-deployment.yaml &&
-                                kubectl apply -f grafana-deployment.yaml
-                            "
-                        """
-                    }
-                }
-            }
-        }
+        // stage('Deploy to Kubernetes') {
+        //     steps {
+        //         script {
+        //             sshagent(credentials: ["${SSH_CREDENTIALS}"]) {
+        //                 // SSH into the remote server and apply Kubernetes manifests
+        //                 sh """
+        //                     ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} "
+        //                         cd ${KUBE_MANIFEST_DIR} &&
+        //                         kubectl apply -f backend-deployment.yaml &&
+        //                         kubectl apply -f frontend-deployment.yaml &&
+        //                         kubectl apply -f db-deployment.yaml &&
+        //                         kubectl apply -f prometheus-deployment.yaml &&
+        //                         kubectl apply -f grafana-deployment.yaml
+        //                     "
+        //                 """
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     post {
